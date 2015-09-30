@@ -6,8 +6,15 @@ var minutes = process.argv[3];
 if (0 < hours < 23 && 0 < minutes < 59) {
     var h1 = (hours / 10) | 0, h2 = hours % 10;
     var m1 = (minutes / 10) | 0, m2 = minutes % 10;
-    var s = getHigher(h1) + getLower(h2) + ':' +
-        getHigher(m1) + getLower(m2);
+    var h = getHigher(h1) + getLower(h2);
+    var m = getHigher(m1) + getLower(m2);
+    if (h.length == 0){
+        h = '-'
+    }
+    if (m.length == 0){
+        m = '-'
+    }
+    var s = h + ':' + m;
     console.log(s);
     printNumber(s);
 
@@ -50,6 +57,7 @@ function printNumber(res){
             case 'X': add = getX();break;
             case 'L': add = getL();break;
             case ':': add = getDelim(); break;
+            case '-': add = getZero(); break;
         }
         for(var j=0; j<5; j++){
 
@@ -76,4 +84,7 @@ function getL(){
 }
 function getDelim(){
     return ['   ', '## ', '   ', '## ', '   ']
+}
+function getZero(){
+    return ['         ','         ','######## ','         ','         ']
 }
