@@ -1,90 +1,107 @@
+
+var Lower  = {
+    0: '',
+    1: 'I',
+    2: 'II',
+    3: 'III',
+    4: 'IV',
+    5: 'V',
+    6: 'VI',
+    7: 'VII',
+    8: 'VIII',
+    9: 'IX'
+};
+var Higher = {
+    0: '',
+    1: 'X',
+    2: 'XX',
+    3: 'XXX',
+    4: 'XL',
+    5: 'L'
+};
+
+var graphicNumbers = {
+    'I':['#### ',
+        ' ##  ',
+        ' ##  ',
+        ' ##  ',
+        '#### '],
+    'V':['##    ## ',
+        '##    ## ',
+        ' ##  ##  ',
+        '  ####   ',
+        '   ##    '],
+    'X':['##   ## ',
+        ' ## ##  ',
+        '  ###   ',
+        ' ## ##  ',
+        '##   ## '],
+    'L':['##      ',
+        '##      ',
+        '##      ',
+        '##      ',
+        '####### '],
+    ':':['   ',
+        '## ',
+        '   ',
+        '## ',
+        '   '],
+    '-':['         ',
+        '         ',
+        '######## ',
+        '         ',
+        '         ']
+};
+
+
+
 var hours = process.argv[2];
 var minutes = process.argv[3];
 
-// Немного замечательного кода и магии
-
-if (0 < hours < 23 && 0 < minutes < 59) {
-    var h1 = (hours / 10) | 0, h2 = hours % 10;
-    var m1 = (minutes / 10) | 0, m2 = minutes % 10;
-    var h = getHigher(h1) + getLower(h2);
-    var m = getHigher(m1) + getLower(m2);
-    if (h.length == 0){
-        h = '-'
-    }
-    if (m.length == 0){
-        m = '-'
-    }
-    var s = h + ':' + m;
-    console.log(s);
-    printNumber(s);
-
-
+var isInt = function(n) {return +n === parseInt(n);};
+if(!isInt(hours) || !isInt(minutes)){
+    process.exit(1);
 } else {
-    console.log("Время указано не верно");
-}
-function getLower(num){
-    switch (num){
-        case 0: return '';
-        case 1: return 'I';
-        case 2: return 'II';
-        case 3: return 'III';
-        case 4: return 'IV';
-        case 5: return 'V';
-        case 6: return 'VI';
-        case 7: return 'VII';
-        case 8: return 'VIII';
-        case 9: return 'IX';
-    }
-}
-function getHigher(num){
-    switch (num){
-        case 0: return '';
-        case 1: return 'X';
-        case 2: return 'XX';
-        case 3: return 'XXX';
-        case 4: return 'XL';
-        case 5: return 'L';
-    }
+
+    var time = getRomanTime(hours, minutes);
+    console.log(time);
+    printNumber(time);
 }
 
-function printNumber(res){
-    var result = ['', '', '', '', ''], c='', add=[];
-    for (var i=0; i<res.length; i++){
-        c = res.charAt(i);
-        switch(c){
-            case 'I': add = getI();break;
-            case 'V': add = getV();break;
-            case 'X': add = getX();break;
-            case 'L': add = getL();break;
-            case ':': add = getDelim(); break;
-            case '-': add = getZero(); break;
+
+function getRomanTime(h, m){
+    if (0 < h && h < 23 && 0 < m && m < 59) {
+        var h1 = (hours / 10) | 0, h2 = hours % 10;
+        var m1 = (minutes / 10) | 0, m2 = minutes % 10;
+        h = Higher[h1] + Lower[h2];
+        m = Higher[m1] + Lower[m2];
+        console.log();
+        if (h.length == 0){
+            h = '-';
         }
-        for(var j=0; j<5; j++){
+        if (m.length == 0){
+            m = '-';
+        }
+        return h + ':' + m;
+    } else {
+        console.log("Время указано не верно");
+    }
+}
 
+function printNumber(time){
+    var result = ['', '', '', '', ''];
+    var c = '', add = [];
+    for (var i=0; i<time.length; i++){
+        c = time.charAt(i);
+        add = graphicNumbers[c];
+        for(var j=0; j<5; j++){
             result[j] += add[j];
         }
-        add=[]
     }
     for(i=1; i<5; i++){
         result[0] +='\n' + result[i];
     }
-    console.log(result[0])
+    console.log(result[0]);
 }
-function getI(){
-    return ['#### ', ' ##  ', ' ##  ', ' ##  ', '#### ']
-}
-function getV(){
-    return ['##    ## ', '##    ## ', ' ##  ##  ', '  ####   ', '   ##    ']
-}
-function getX(){
-    return ['##   ## ', ' ## ##  ', '  ###   ', ' ## ##  ', '##   ## ']
-}
-function getL(){
-    return ['##      ','##      ','##      ','##      ', '####### ']
-}
-function getDelim(){
-    return ['   ', '## ', '   ', '## ', '   ']
-}
-function getZero(){
-    return ['         ','         ','######## ','         ','         ']
-}
+
+
