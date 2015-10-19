@@ -1,5 +1,4 @@
-
-var Lower  = {
+var lower  = {
     0: '',
     1: 'I',
     2: 'II',
@@ -11,7 +10,7 @@ var Lower  = {
     8: 'VIII',
     9: 'IX'
 };
-var Higher = {
+var higher = {
     0: '',
     1: 'X',
     2: 'XX',
@@ -58,7 +57,7 @@ var graphicNumbers = {
 var hours = process.argv[2];
 var minutes = process.argv[3];
 
-var isInt = function(n) {return +n === parseInt(n);};
+var isInt = function(n) {return Number(n) === parseInt(n);};
 if(!isInt(hours) || !isInt(minutes)){
     process.exit(1);
 } else {
@@ -69,20 +68,20 @@ if(!isInt(hours) || !isInt(minutes)){
 }
 
 
-function getRomanTime(h, m){
-    if (0 < h && h < 23 && 0 < m && m < 59) {
-        var h1 = (hours / 10) | 0, h2 = hours % 10;
-        var m1 = (minutes / 10) | 0, m2 = minutes % 10;
-        h = Higher[h1] + Lower[h2];
-        m = Higher[m1] + Lower[m2];
-        console.log();
-        if (h.length == 0){
-            h = '-';
+
+function getRomanTime(hours, minutes){
+    if (0 < hours && hours < 23 && 0 < minutes && minutes < 59) {
+        var hours1 = Math.floor(hours / 10), hours2 = hours % 10;
+        var minutes1 = Math.floor(minutes / 10), minutes2 = minutes % 10;
+        hours = higher[hours1] + lower[hours2];
+        minutes = higher[minutes1] + lower[minutes2];
+        if (hours.length === 0){
+            hours = '-';
         }
-        if (m.length == 0){
-            m = '-';
+        if (minutes.length === 0){
+            minutes = '-';
         }
-        return h + ':' + m;
+        return hours + ':' + minutes;
     } else {
         console.log("Время указано не верно");
     }
@@ -90,10 +89,10 @@ function getRomanTime(h, m){
 
 function printNumber(time){
     var result = ['', '', '', '', ''];
-    var c = '', add = [];
+    var char = '', add = [];
     for (var i=0; i<time.length; i++){
-        c = time.charAt(i);
-        add = graphicNumbers[c];
+        char = time.charAt(i);
+        add = graphicNumbers[char];
         for(var j=0; j<5; j++){
             result[j] += add[j];
         }
@@ -103,5 +102,3 @@ function printNumber(time){
     }
     console.log(result[0]);
 }
-
-
